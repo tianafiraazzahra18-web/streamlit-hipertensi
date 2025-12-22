@@ -15,7 +15,7 @@ with col_judul:
     st.title('UPT Puskesmas Palas')
 
 #Judul WEB
-st.title('Data Mining Prediksi Hipertensi Pada UPT Puskesmas Palas')
+st.title('Data Mining Prediksi Hipertensi')
 
 #Membagi Kolom
 col1, col2, col3 = st.columns(3)
