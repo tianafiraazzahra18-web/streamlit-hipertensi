@@ -21,31 +21,31 @@ st.title('Data Mining Prediksi Hipertensi')
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    JenisKelamin = st.text_input ('Input Jenis Kelamin')
+    JenisKelamin = st.text_input ('Input Jenis Kelamin', value='0')
 
 with col2:
-    Usia = st.text_input ('Input Usia')
+    Usia = st.text_input ('Input Usia', value='0')
 
 with col3:
-    TinggiBadan = st.text_input ('Input Tinggi Badan')
+    TinggiBadan = st.text_input ('Input Tinggi Badan', value='0')
 
 with col1:
-    BeratBadan = st.text_input ('Input Berat Badan')
+    BeratBadan = st.text_input ('Input Berat Badan', value='0')
 
 with col2:
-    IMT = st.text_input ('Input IMT')
+    IMT = st.text_input ('Input IMT', value='0')
 
 with col3:
-    HasilIMT = st.text_input ('Input Hasil IMT')
+    HasilIMT = st.text_input ('Input Hasil IMT', value='0')
 
 with col1:
-    LingkarPerut = st.text_input ('Input Lingkar Perut')
+    LingkarPerut = st.text_input ('Input Lingkar Perut', value='0')
 
 with col2:
-    Merokok = st.text_input ('Input Merokok')
+    Merokok = st.text_input ('Input Merokok', value='0')
 
 with col3:
-    KonsumsiAlkohol =st.text_input ('Input Konsumsi Alkohol')
+    KonsumsiAlkohol =st.text_input ('Input Konsumsi Alkohol', value='0')
 
 #Code untuk prediksi
 hip_diagnosis = ''
