@@ -21,8 +21,12 @@ st.title('Data Mining Prediksi Hipertensi')
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    JenisKelamin = st.text_input ('Input Jenis Kelamin', value='0')
-
+   JenisKelamin = st.selectbox ('Input Jenis Kelamin', ['Perempuan', 'Laki-laki'])
+if JenisKelamin == 'Perempuan':
+    JenisKelamin = 0
+else:
+    JenisKelamin = 1
+        
 with col2:
     Usia = st.text_input ('Input Usia', value='0')
 
@@ -36,16 +40,28 @@ with col2:
     IMT = st.text_input ('Input IMT', value='0')
 
 with col3:
-    HasilIMT = st.text_input ('Input Hasil IMT', value='0')
+    HasilIMT = st.selectbox('Input Hasil IMT', ['Ideal', 'Lebih', 'Obesitas', 'Kurang', 'Gemuk'])
+    if HasilIMT == 'Ideal':
+        HasilIMT = 0
+    elif HasilIMT == 'Lebih':
+        HasilIMT = 1
+    elif HasilIMT == 'Obesitas':
+        HasilIMT = 2
+    elif HasilIMT == 'Kurang':
+        HasilIMT = 3
+    else: 
+        HasilIMT = 4
 
 with col1:
     LingkarPerut = st.text_input ('Input Lingkar Perut', value='0')
 
 with col2:
-    Merokok = st.text_input ('Input Merokok', value='0')
+    Merokok = st.selectbox ('Input Merokok', ['Tidak', 'Ya'])
+    Merokok = 1 if Merokok == 'Ya' else 0
 
 with col3:
-    KonsumsiAlkohol =st.text_input ('Input Konsumsi Alkohol', value='0')
+    KonsumsiAlkohol = st.selectbox('Input Konsumsi Alkohol', ['Tidak', 'Ya'])
+    KonsumsiAlkohol = 1 if KonsumsiAlkohol == 'Ya' else 0
 
 #Code untuk prediksi
 hip_diagnosis = ''
