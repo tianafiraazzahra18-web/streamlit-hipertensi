@@ -68,19 +68,19 @@ with col2:
     Usia = st.text_input('Input Usia', value='0')
     IMT = st.text_input('Input IMT', value='0')
     
-    Merokok_pil = st.selectbox('Input Merokok', ['Tidak', 'Ya'])
-    Merokok = 1 if Merokok_pil == 'Ya' else 0
+    Merokok = st.selectbox('Input Merokok', ['Tidak', 'Ya'])
+    Merokok = 1 if Merokok == 'Ya' else 0
 
 with col3:
     TinggiBadan = st.text_input('Input Tinggi Badan', value='0')
     
-    HasilIMT_pil = st.selectbox('Input Hasil IMT', ['Ideal', 'Lebih', 'Obesitas', 'Kurang', 'Gemuk'])
+    HasilIMT = st.selectbox('Input Hasil IMT', ['Ideal', 'Lebih', 'Obesitas', 'Kurang', 'Gemuk'])
     # Konversi Hasil IMT ke Angka
     imt_map = {'Ideal': 0, 'Lebih': 1, 'Obesitas': 2, 'Kurang': 3, 'Gemuk': 4}
-    HasilIMT = imt_map[HasilIMT_pil]
+    HasilIMT = imt_map[HasilIMT]
 
-    KonsumsiAlkohol_pil = st.selectbox('Input Konsumsi Alkohol', ['Tidak', 'Ya'])
-    KonsumsiAlkohol = 1 if KonsumsiAlkohol_pil == 'Ya' else 0
+    KonsumsiAlkohol = st.selectbox('Input Konsumsi Alkohol', ['Tidak', 'Ya'])
+    KonsumsiAlkohol = 1 if KonsumsiAlkohol == 'Ya' else 0
 
 st.markdown("---")
 
