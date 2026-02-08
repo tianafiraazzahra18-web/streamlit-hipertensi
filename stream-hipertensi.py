@@ -1,21 +1,57 @@
 import pickle
 import streamlit as st
+import base64
+
+#Proses gambar agar dapat masuk ke kotak pink
+def get_base64(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+#Nama file GAMBAR
+img_base64 = get_base64('UPT PALAS.png')
 
 #Membaca Model (Load Model)
 hipertensi_model = pickle.load(open('hipertensi_model.sav', 'rb'))
 scaler = pickle.load(open('scaler.sav', 'rb'))
 
-# Membuat dua kolom untuk Logo dan Judul
-col_logo, col_judul = st.columns([1, 4])
+st.set_page_config(layout="wide")
 
-with col_logo:
-    st.image('UPT PALAS.png', width=150) 
+# --- HEADER BANNER PINK ---
+st.markdown(f"""
+    <style>
+    .main-header {{
+        background-color: #F06292; 
+        padding: 30px; 
+        border-radius: 15px; 
+        display: flex; 
+        align-items: center; 
+        margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }}
+    .header-text {{
+        color: white;
+        font-family: 'sans-serif';
+    }}
+    .stButton>button {{
+        background-color: #F06292;
+        color: white;
+        border-radius: 10px;
+        font-weight: bold;
+    }}
+    </style>
+    
+    <div class="main-header">
+        <img src="data:image/png;base64,{img_base64}" style="width: 300px; border-radius: 10px; margin-right: 25px; border: 2px solid white;">
+        <div class="header-text">
+            <h1 style="margin: 0; font-size: 32px;">Data Mining Prediksi Hipertensi</h1>
+            <p style="margin: 0; font-size: 18px;">UPT Puskesmas Palas - Kec. Palas Lampung Selatan</p>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 
-with col_judul:
-    st.title('UPT Puskesmas Palas')
-
-#Judul WEB
-st.title('Data Mining Prediksi Hipertensi')
+# Judul Kecil di atas form
+st.markdown("Formulir Input Data Pasien")
 
 #Membagi Kolom
 col1, col2, col3 = st.columns(3)
