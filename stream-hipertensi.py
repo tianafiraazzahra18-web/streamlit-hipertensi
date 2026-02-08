@@ -2,20 +2,20 @@ import pickle
 import streamlit as st
 import base64
 
-#Proses gambar agar dapat masuk ke kotak pink
+# Proses gambar agar dapat masuk ke kotak pink
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
-#Nama file GAMBAR
+# Nama file GAMBAR
 img_base64 = get_base64('UPT PALAS.png')
 
-#Membaca Model (Load Model)
+# Membaca Model (Load Model)
 hipertensi_model = pickle.load(open('hipertensi_model.sav', 'rb'))
 scaler = pickle.load(open('scaler.sav', 'rb'))
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title="Prediksi Hipertensi")
 
 # --- HEADER BANNER PINK ---
 st.markdown(f"""
@@ -38,6 +38,8 @@ st.markdown(f"""
         color: white;
         border-radius: 10px;
         font-weight: bold;
+        width: 100%;
+        height: 3em;
     }}
     </style>
     
@@ -50,75 +52,63 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Judul Kecil di atas form
 st.markdown("Formulir Input Data Pasien")
 
-#Membagi Kolom
+# --- INPUT DATA ---
 col1, col2, col3 = st.columns(3)
 
 with col1:
-   JenisKelamin = st.selectbox ('Input Jenis Kelamin', ['Perempuan', 'Laki-laki'])
-if JenisKelamin == 'Perempuan':
-    JenisKelamin = 0
-else:
-    JenisKelamin = 1
-        
-with col2:
-    Usia = st.text_input ('Input Usia', value='0')
-
-with col3:
-    TinggiBadan = st.text_input ('Input Tinggi Badan', value='0')
-
-with col1:
-    BeratBadan = st.text_input ('Input Berat Badan', value='0')
+    jk_pilihan = st.selectbox('Input Jenis Kelamin', ['Perempuan', 'Laki-laki'])
+    JenisKelamin = 0 if jk_pilihan == 'Perempuan' else 1
+    
+    BeratBadan = st.text_input('Input Berat Badan', value='0')
+    LingkarPerut = st.text_input('Input Lingkar Perut', value='0')
 
 with col2:
-    IMT = st.text_input ('Input IMT', value='0')
+    Usia = st.text_input('Input Usia', value='0')
+    IMT = st.text_input('Input IMT', value='0')
+    
+    Merokok_pil = st.selectbox('Input Merokok', ['Tidak', 'Ya'])
+    Merokok = 1 if Merokok_pil == 'Ya' else 0
 
 with col3:
-    HasilIMT = st.selectbox('Input Hasil IMT', ['Ideal', 'Lebih', 'Obesitas', 'Kurang', 'Gemuk'])
-    if HasilIMT == 'Ideal':
-        HasilIMT = 0
-    elif HasilIMT == 'Lebih':
-        HasilIMT = 1
-    elif HasilIMT == 'Obesitas':
-        HasilIMT = 2
-    elif HasilIMT == 'Kurang':
-        HasilIMT = 3
-    else: 
-        HasilIMT = 4
+    TinggiBadan = st.text_input('Input Tinggi Badan', value='0')
+    
+    HasilIMT_pil = st.selectbox('Input Hasil IMT', ['Ideal', 'Lebih', 'Obesitas', 'Kurang', 'Gemuk'])
+    # Konversi Hasil IMT ke Angka
+    imt_map = {'Ideal': 0, 'Lebih': 1, 'Obesitas': 2, 'Kurang': 3, 'Gemuk': 4}
+    HasilIMT = imt_map[HasilIMT_pil]
 
-with col1:
-    LingkarPerut = st.text_input ('Input Lingkar Perut', value='0')
+    KonsumsiAlkohol_pil = st.selectbox('Input Konsumsi Alkohol', ['Tidak', 'Ya'])
+    KonsumsiAlkohol = 1 if KonsumsiAlkohol_pil == 'Ya' else 0
 
-with col2:
-    Merokok = st.selectbox ('Input Merokok', ['Tidak', 'Ya'])
-    Merokok = 1 if Merokok == 'Ya' else 0
+st.markdown("---")
 
-with col3:
-    KonsumsiAlkohol = st.selectbox('Input Konsumsi Alkohol', ['Tidak', 'Ya'])
-    KonsumsiAlkohol = 1 if KonsumsiAlkohol == 'Ya' else 0
-
-#Code untuk prediksi
-hip_diagnosis = ''
-
-#Membuat Tombol Prediksi
+#TOMBOL PREDIKSI DENGAN VALIDASI
 if st.button('Test Prediksi Hipertensi'):
-    # Ambil semua input dan jadikan float
-    input_data = [[
-        float(JenisKelamin), float(Usia), float(TinggiBadan), 
-        float(BeratBadan), float(IMT), float(HasilIMT), 
-        float(LingkarPerut), float(Merokok), float(KonsumsiAlkohol)
-    ]]
-    
-    # STANDARISASI: Ini kunci agar hasil sama dengan Jupyter!
-    std_data = scaler.transform(input_data)
-    
-    # PREDIKSI: Gunakan data yang sudah di-standarisasi
-    hip_prediction = hipertensi_model.predict(std_data)
-
-    # LOGIKA: Sesuaikan dengan Jupyter (0 = Tidak, selain itu = Iya)
-    if (hip_prediction[0] == 0):
-        st.success('Pasien Tidak Terkena Hipertensi')
+    # VALIDASI: Cek jika ada data yang masih '0'
+    if Usia == '0' or TinggiBadan == '0' or BeratBadan == '0' or IMT == '0' or LingkarPerut == '0':
+        st.warning("⚠️ Mohon maaf, semua data (Usia, Tinggi, Berat, IMT, Lingkar Perut) harus diisi dan tidak boleh 0!")
     else:
-        st.error('Pasien Terkena Hipertensi')
+        try:
+            # Ambil semua input dan jadikan float
+            input_data = [[
+                float(JenisKelamin), float(Usia), float(TinggiBadan), 
+                float(BeratBadan), float(IMT), float(HasilIMT), 
+                float(LingkarPerut), float(Merokok), float(KonsumsiAlkohol)
+            ]]
+            
+            # STANDARISASI
+            std_data = scaler.transform(input_data)
+            
+            # PREDIKSI
+            hip_prediction = hipertensi_model.predict(std_data)
+
+            # TAMPILKAN HASIL
+            if hip_prediction[0] == 0:
+                st.success('✅ Pasien Tidak Terkena Hipertensi')
+            else:
+                st.error('🚨 Pasien Terkena Hipertensi')
+        
+        except Exception as e:
+            st.error(f"Terjadi kesalahan input: {e}")
