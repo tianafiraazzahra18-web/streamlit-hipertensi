@@ -21,7 +21,7 @@ st.set_page_config(layout="wide", page_title="Prediksi Hipertensi")
 st.markdown(f"""
     <style>
     .main-header {{
-        background-color: #F06292; 
+        background-color: #42A5F5;
         padding: 30px; 
         border-radius: 15px; 
         display: flex; 
@@ -34,7 +34,7 @@ st.markdown(f"""
         font-family: 'sans-serif';
     }}
     .stButton>button {{
-        background-color: #F06292;
+        background-color: #42A5F5;
         color: white;
         border-radius: 10px;
         font-weight: bold;
