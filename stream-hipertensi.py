@@ -2,7 +2,7 @@ import pickle
 import streamlit as st
 import base64
 
-# Proses gambar agar dapat masuk ke kotak pink
+# Proses gambar agar dapat masuk ke kotak biru
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -17,39 +17,79 @@ scaler = pickle.load(open('scaler.sav', 'rb'))
 
 st.set_page_config(layout="wide", page_title="Prediksi Hipertensi")
 
-# --- HEADER BANNER PINK ---
+# --- HEADER BANNER BIRU ---
 st.markdown(f"""
-    <style>
-    .main-header {{
-        background-color: #42A5F5;
-        padding: 30px; 
-        border-radius: 15px; 
-        display: flex; 
-        align-items: center; 
-        margin-bottom: 25px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }}
-    .header-text {{
-        color: white;
-        font-family: 'sans-serif';
-    }}
-    .stButton>button {{
+<style>
+.hero {{
+    background-image: url("data:image/png;base64,{img_base64}");
+    background-size: cover;
+    background-position: center 40%;
+    height: 420px;
+    border-radius: 20px;
+    position: relative;
+    margin-bottom: 40px;
+    overflow: hidden;
+}}
+
+.hero::before {{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(13,71,161,0.85),
+        rgba(13,71,161,0.55),
+        rgba(13,71,161,0.2)
+    );
+    z-index: 1;
+}}
+
+.hero-content {{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 2;
+    width: 100%;
+    padding: 0 20px;
+}}
+
+.hero h1 {{
+    font-size: 64px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}}
+
+.hero p {{
+    font-size: 22px;
+    opacity: 0.9;
+    
+}}
+
+.hero p {{
+    font-size: 20px;
+    opacity: 0.95;
+}}
+.stButton>button {{
         background-color: #42A5F5;
         color: white;
         border-radius: 10px;
         font-weight: bold;
         width: 100%;
         height: 3em;
-    }}
-    </style>
-    
-    <div class="main-header">
-        <img src="data:image/png;base64,{img_base64}" style="width: 300px; border-radius: 10px; margin-right: 25px; border: 2px solid white;">
-        <div class="header-text">
-            <h1 style="margin: 0; font-size: 32px;">Data Mining Prediksi Hipertensi</h1>
-            <p style="margin: 0; font-size: 18px;">UPT Puskesmas Palas - Kec. Palas Lampung Selatan</p>
-        </div>
+}}
+</style>
+
+<div class="hero">
+    <div class="hero-content">
+       <h1>Data Mining Prediksi Hipertensi</h1>
+        <p style="font-size:18px; opacity:0.9;">
+            UPT Puskesmas Palas - Kec. Palas, Kabupaten Lampung Selatan.
+        </p>
     </div>
+</div>
 """, unsafe_allow_html=True)
 
 st.markdown("Formulir Input Data Pasien")
@@ -91,7 +131,7 @@ if st.button('Test Prediksi Hipertensi'):
         st.warning("⚠️ Mohon maaf, semua data (Usia, Tinggi, Berat, IMT, Lingkar Perut) harus diisi dan tidak boleh 0!")
     else:
         try:
-            # Ambil semua input dan jadikan float
+            # Mengambil semua input dan jadikan float
             input_data = [[
                 float(JenisKelamin), float(Usia), float(TinggiBadan), 
                 float(BeratBadan), float(IMT), float(HasilIMT), 
