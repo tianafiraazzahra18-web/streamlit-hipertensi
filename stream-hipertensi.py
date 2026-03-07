@@ -162,8 +162,10 @@ if st.button('Test Prediksi Hipertensi'):
 
             # 3. --- PROSES REKAM DATA KE CSV ---
             # Menyiapkan baris data baru
+            # Format: Tanggal-Bulan-Tahun Jam:Menit
+            waktu_sekarang = datetime.now().strftime("%d-%m-%Y %H:%M")
             data_baru = {
-                'Waktu': [datetime.now().strftime("%d/%m/%Y %H:%M:%S")],
+                'Waktu': [waktu_sekarang],
                 'Nama': [nama_pasien],
                 'Jenis Kelamin': ['Laki-laki' if JenisKelamin == 1 else 'Perempuan'],
                 'Usia': [Usia],
@@ -190,3 +192,18 @@ if st.button('Test Prediksi Hipertensi'):
 
         except Exception as e:
             st.error(f"Terjadi kesalahan: {e}")
+
+            # --- TAMPILKAN TABEL RIWAYAT (Di luar blok tombol) ---
+st.markdown("---")
+st.markdown("### 📋 Riwayat Pemeriksaan Terakhir")
+
+file_rekam = 'rekam_medis.csv'
+
+if os.path.exists(file_rekam):
+    # Membaca data rekam medis agar bisa dilihat di web
+    df_riwayat = pd.read_csv(file_rekam)
+    
+    # Menampilkan 10 data terbaru secara terbalik (yang baru di atas)
+    st.dataframe(df_riwayat.tail(10), use_container_width=True)
+else:
+    st.info("Belum ada riwayat pemeriksaan yang tersimpan.")
